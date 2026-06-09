@@ -1,590 +1,490 @@
 <!DOCTYPE html>
-
-<html class="light" lang="en"><head>
+<html class="light" lang="en">
+<head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>BioGrow Lab - Analytics Dashboard</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
       tailwind.config = {
         darkMode: "class",
         theme: {
           extend: {
             "colors": {
-                    "on-tertiary-fixed": "#301400",
-                    "surface-tint": "#3d6751",
-                    "primary-fixed": "#bfedd1",
-                    "tertiary-fixed": "#ffdcc6",
-                    "tertiary-fixed-dim": "#fcb889",
-                    "on-surface-variant": "#414943",
-                    "surface-container-low": "#f3f4f5",
-                    "surface-bright": "#f8f9fa",
-                    "tertiary": "#85522c",
-                    "on-surface": "#191c1d",
-                    "surface-container-lowest": "#ffffff",
-                    "on-primary-fixed-variant": "#254f3a",
-                    "on-secondary": "#ffffff",
-                    "surface": "#f8f9fa",
-                    "secondary-container": "#b9ecec",
-                    "secondary": "#366666",
-                    "on-tertiary": "#ffffff",
-                    "primary-fixed-dim": "#a4d1b6",
-                    "inverse-surface": "#2e3132",
-                    "secondary-fixed": "#b9ecec",
-                    "on-secondary-fixed": "#002020",
-                    "surface-container-high": "#e7e8e9",
-                    "surface-container-highest": "#e1e3e4",
-                    "on-primary-container": "#345d48",
-                    "error-container": "#ffdad6",
-                    "on-secondary-fixed-variant": "#1b4e4e",
-                    "inverse-primary": "#a4d1b6",
-                    "on-tertiary-container": "#7b4924",
-                    "secondary-fixed-dim": "#9ed0cf",
-                    "on-primary": "#ffffff",
-                    "primary": "#3d6751",
-                    "surface-container": "#edeeef",
-                    "error": "#ba1a1a",
-                    "tertiary-container": "#ffbd90",
-                    "outline-variant": "#c1c8c1",
-                    "surface-variant": "#e1e3e4",
-                    "primary-container": "#a8d5ba",
-                    "on-tertiary-fixed-variant": "#693b17",
-                    "on-background": "#191c1d",
-                    "on-error": "#ffffff",
-                    "surface-dim": "#d9dadb",
-                    "background": "#f8f9fa",
-                    "on-error-container": "#93000a",
-                    "inverse-on-surface": "#f0f1f2",
-                    "outline": "#717973",
-                    "on-primary-fixed": "#002113",
-                    "on-secondary-container": "#3c6c6c"
+              "inverse-surface": "#2e3132",
+              "inverse-on-surface": "#f0f1f2",
+              "primary": "#3d6751",
+              "secondary": "#366666",
+              "tertiary": "#85522c",
+              "surface": "#f8f9fa",
+              "surface-bright": "#f8f9fa",
+              "on-surface": "#191c1d",
+              "on-surface-variant": "#414943",
+              "error": "#ba1a1a"
             },
-            "borderRadius": {
-                    "DEFAULT": "0.25rem",
-                    "lg": "0.5rem",
-                    "xl": "0.75rem",
-                    "full": "9999px"
-            },
-            "spacing": {
-                    "unit": "8px",
-                    "margin-desktop": "40px",
-                    "margin-mobile": "16px",
-                    "gutter": "24px",
-                    "container-max": "1440px"
-            },
-            "fontFamily": {
-                    "headline-lg-mobile": ["Inter"],
-                    "label-sm": ["Inter"],
-                    "body-md": ["Inter"],
-                    "body-lg": ["Inter"],
-                    "display-lg": ["Inter"],
-                    "label-md": ["Inter"],
-                    "headline-md": ["Inter"],
-                    "headline-lg": ["Inter"]
-            },
-            "fontSize": {
-                    "headline-lg-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
-                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
-                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
-                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
-                    "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
-                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.01em", "fontWeight": "500"}],
-                    "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "500"}],
-                    "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}]
-            }
-          },
-        },
+            "borderRadius": { "DEFAULT": "8px", "lg": "12px", "xl": "16px", "full": "9999px" },
+            "spacing": { "container-max": "1440px", "margin-desktop": "40px", "gutter": "24px" },
+            "fontFamily": { "sans": ['Inter', 'sans-serif'] }
+          }
+        }
       }
     </script>
 <style>
-        .neumorphic-convex {
-            box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
+        .neumorphic-convex { box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff; }
+        .neumorphic-convex-sm { box-shadow: 4px 4px 8px #d1d9e6, -4px -4px 8px #ffffff; }
+        .neumorphic-inset { box-shadow: inset 6px 6px 12px #d1d9e6, inset -6px -6px 12px #ffffff; }
+        .dark .neumorphic-convex { box-shadow: 8px 8px 16px rgba(0,0,0,0.5), -8px -8px 16px rgba(255,255,255,0.05); }
+        .dark .neumorphic-convex-sm { box-shadow: 4px 4px 8px rgba(0,0,0,0.5), -4px -4px 8px rgba(255,255,255,0.05); }
+        .dark .neumorphic-inset { box-shadow: inset 6px 6px 12px rgba(0,0,0,0.5), inset -6px -6px 12px rgba(255,255,255,0.05); }
+        body, div, button { transition: background-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease; }
+        .dark input, .dark select { background-color: #1e1f20; color: #f0f1f2; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        
+        /* Modern metrik buton stilleri - dark mode uyumlu */
+        .metric-chip {
+            background-color: #f3f4f6;
+            color: #1f2937;
+            box-shadow: 2px 2px 5px #d1d9e6, -2px -2px 5px #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
-        .neumorphic-convex-sm {
-            box-shadow: 4px 4px 8px #d1d9e6, -4px -4px 8px #ffffff;
+        .dark .metric-chip {
+            background-color: #374151;
+            color: #e5e7eb;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5), -2px -2px 5px rgba(255,255,255,0.05);
         }
-        .neumorphic-convex-right {
-            box-shadow: 8px 0 15px rgba(0,0,0,0.03), -4px -4px 10px #ffffff;
+        .metric-chip.active {
+            background-color: #3d6751;
+            color: white;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2), inset -2px -2px 5px rgba(255,255,255,0.1);
         }
-        .neumorphic-inset {
-            box-shadow: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
+        .dark .metric-chip.active {
+            background-color: #2d5541;
+            color: #f0f1f2;
         }
-        .neumorphic-inset-sm {
-            box-shadow: inset 2px 2px 4px #d1d9e6, inset -2px -2px 4px #ffffff;
+        .metric-chip:hover {
+            transform: translateY(-1px);
         }
-        body {
-            background-color: #f8f9fa;
+        .metric-chip.active:hover {
+            transform: translateY(0);
         }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="font-body-md text-on-background flex h-screen overflow-hidden">
-<!-- SideNavBar -->
-<aside class="hidden md:flex flex-col p-6 space-y-4 h-screen w-64 docked left-0 bg-surface dark:bg-inverse-surface shadow-[8px_0_15px_rgba(0,0,0,0.03)] dark:border-r dark:border-outline-variant z-20">
-<div class="mb-8 px-2">
-<h1 class="font-headline-lg text-headline-lg text-primary">System Core</h1>
-<p class="text-on-surface-variant font-label-md text-label-md">v2.4 Organic Lab</p>
-</div>
-<nav class="flex-1 space-y-2">
-<a class="flex items-center space-x-3 p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl hover:translate-x-1 transition-all duration-200" href="index.html">
-<span class="material-symbols-outlined">dashboard</span>
-<span class="font-label-md text-label-md">Dashboard</span>
-</a>
-<a class="flex items-center space-x-3 p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl hover:translate-x-1 transition-all duration-200" href="#" onclick="showToast('Chambers module coming soon'); return false;">
-<span class="material-symbols-outlined">potted_plant</span>
-<span class="font-label-md text-label-md">Chambers</span>
-</a>
-<a class="flex items-center space-x-3 p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl hover:translate-x-1 transition-all duration-200" href="#" onclick="showToast('Cultivation module coming soon'); return false;">
-<span class="material-symbols-outlined">biotech</span>
-<span class="font-label-md text-label-md">Cultivation</span>
-</a>
-<a class="flex items-center space-x-3 p-3 bg-primary-container text-on-primary-container rounded-xl shadow-[inset_4px_4px_8px_rgba(0,0,0,0.1),inset_-4px_-4px_8px_rgba(255,255,255,0.7)] transition-all ease-in-out" href="#">
-<span class="material-symbols-outlined">bar_chart</span>
-<span class="font-label-md text-label-md">Analytics</span>
-</a>
-<a class="flex items-center space-x-3 p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl hover:translate-x-1 transition-all duration-200" href="#" onclick="showToast('Lab Settings coming soon'); return false;">
-<span class="material-symbols-outlined">settings</span>
-<span class="font-label-md text-label-md">Lab Settings</span>
-</a>
-</nav>
-<button onclick="openNewBatchModal()" class="mt-4 w-full p-4 bg-primary text-on-primary rounded-2xl font-label-md text-label-md neumorphic-convex active:scale-95 transition-all">
-            New Batch
-        </button>
-<div class="pt-8 border-t border-outline-variant space-y-2">
-<a class="flex items-center space-x-3 p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl hover:translate-x-1 transition-all" href="#" onclick="showToast('Opening support documentation...'); return false;">
-<span class="material-symbols-outlined">help</span>
-<span class="font-label-md text-label-md">Support</span>
-</a>
-<a class="flex items-center space-x-3 p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl hover:translate-x-1 transition-all" href="#" onclick="confirmLogout(); return false;">
-<span class="material-symbols-outlined">logout</span>
-<span class="font-label-md text-label-md">Logout</span>
-</a>
-</div>
+<body class="bg-surface-bright dark:bg-inverse-surface text-on-surface dark:text-inverse-on-surface overflow-hidden h-screen flex">
+
+<!-- SideNavBar - Dashboard ile tamamen aynı -->
+<aside class="hidden md:flex flex-col p-6 space-y-4 h-screen w-64 bg-surface dark:bg-inverse-surface shadow-[8px_0_15px_rgba(0,0,0,0.03)] dark:shadow-[8px_0_15px_rgba(0,0,0,0.4)] z-50">
+    <div class="flex items-center gap-3 mb-8">
+        <div class="w-10 h-10 rounded-xl neumorphic-convex flex items-center justify-center bg-primary/10 text-primary">
+            <span class="material-symbols-outlined">biotech</span>
+        </div>
+        <div>
+            <h1 class="font-bold text-primary text-lg">System Core</h1>
+            <p class="text-[10px] text-on-surface-variant">v2.4 Organic Lab</p>
+        </div>
+    </div>
+    <nav class="flex-1 space-y-3">
+        <a href="/" class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-white/20 rounded-xl transition-all cursor-pointer">
+            <span class="material-symbols-outlined">dashboard</span>
+            <span class="font-medium">Dashboard</span>
+        </a>
+        <div class="flex items-center gap-3 p-3 bg-primary/10 text-primary rounded-xl shadow-inner cursor-pointer">
+            <span class="material-symbols-outlined">bar_chart</span>
+            <span class="font-medium">Analytics</span>
+        </div>
+        
+    </nav>
+    
 </aside>
-<!-- Main Content Area -->
-<div class="flex-1 flex flex-col overflow-hidden relative">
-<!-- TopAppBar -->
-<header class="flex justify-between items-center w-full px-margin-desktop py-4 h-20 bg-surface dark:bg-inverse-surface shadow-[4px_4px_10px_rgba(0,0,0,0.05),-4px_-4px_10px_rgba(255,255,255,0.8)] dark:shadow-none z-10">
-<div class="flex items-center gap-4">
-<span class="font-display-lg text-display-lg font-bold text-primary">BioGrow Lab</span>
-</div>
-<div class="flex items-center space-x-6">
-<div class="relative w-64 neumorphic-inset rounded-full px-4 py-2 flex items-center bg-surface">
-<span class="material-symbols-outlined text-on-surface-variant mr-2">search</span>
-<input class="bg-transparent border-none focus:ring-0 text-sm w-full" placeholder="Search data points..." type="text"/>
-</div>
-<div class="flex space-x-4">
-<button onclick="toggleNotifications()" class="material-symbols-outlined text-primary p-2 neumorphic-convex-sm rounded-full active:scale-95">notifications</button>
-<button onclick="showToast('Lab Settings coming soon')" class="material-symbols-outlined text-primary p-2 neumorphic-convex-sm rounded-full active:scale-95">settings</button>
-<div class="w-10 h-10 rounded-full neumorphic-convex overflow-hidden border-2 border-white">
-<img alt="Chief Mycologist Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCm2C0sbd4gR5ZYhnaeqnXUaupUtU84auQKfZXKkFJvq4Fbwyp0g6qJIduk4k81lBO5zRRjwBegDnVohtU-JqsaDxacGHDapQu_7k4siO_uWjHRAHNXG9wUPKVyAa2eZ0-UxvdparH3w3sziGnEOmn679YnigARsiAu87ySmR0TblsiF-mtwDQ87iOw4iKzG-5VCToeUB9Ur_lWcRyhkJRdWd-NTqa6XIR__zHUNUKJoiMp994MCBBNfTQepu7fCsGQN6oZ9jnDNEs"/>
-</div>
-</div>
-</div>
-</header>
-<!-- Main Scrollable Canvas -->
-<main class="flex-1 overflow-y-auto p-margin-desktop bg-surface-bright">
-<div class="max-w-container-max mx-auto space-y-8">
-<!-- Page Title & Data Export -->
-<div class="flex justify-between items-end">
-<div>
-<h2 class="font-headline-lg text-headline-lg text-on-surface">Growth Analytics</h2>
-<p class="text-on-surface-variant font-body-md text-body-md mt-1">Real-time biological performance metrics for Chamber 04-B</p>
-</div>
-<div class="flex space-x-4">
-<button onclick="downloadCSV()" class="flex items-center space-x-2 px-6 py-3 bg-surface rounded-xl neumorphic-convex text-primary font-label-md text-label-md active:scale-95 transition-all">
-<span class="material-symbols-outlined">download</span>
-<span>Download CSV</span>
-</button>
-<button onclick="exportPDF()" class="flex items-center space-x-2 px-6 py-3 bg-primary text-on-primary rounded-xl neumorphic-convex font-label-md text-label-md active:scale-95 transition-all">
-<span class="material-symbols-outlined">picture_as_pdf</span>
-<span>Export PDF Report</span>
-</button>
-</div>
-</div>
-<!-- Controls Bar (Time Range & Metrics) -->
-<div class="p-6 bg-surface rounded-2xl neumorphic-convex flex flex-wrap items-center justify-between gap-6">
-<!-- Time Range Tabs -->
-<div class="flex p-1.5 neumorphic-inset rounded-xl bg-surface" id="time-tabs">
-<button onclick="setTimeRange(this,'24h')" class="px-6 py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors">24h</button>
-<button onclick="setTimeRange(this,'7d')" class="px-6 py-2 rounded-lg font-label-md text-label-md bg-white shadow-sm text-primary font-semibold">7d</button>
-<button onclick="setTimeRange(this,'30d')" class="px-6 py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors">30d</button>
-<button onclick="setTimeRange(this,'90d')" class="px-6 py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors">90d</button>
-</div>
-<!-- Metric Multi-select Toggles -->
-<div class="flex items-center space-x-4">
-<label class="flex items-center space-x-2 cursor-pointer group" onclick="toggleMetric(this,'temp','primary')">
-<div class="w-12 h-6 neumorphic-inset rounded-full relative transition-colors bg-primary/20" id="toggle-temp">
-<div class="absolute top-1 left-7 w-4 h-4 bg-primary rounded-full shadow-sm transition-all"></div>
-</div>
-<span class="font-label-md text-label-md text-on-surface">Temperature</span>
-</label>
-<label class="flex items-center space-x-2 cursor-pointer group" onclick="toggleMetric(this,'humid','secondary')">
-<div class="w-12 h-6 neumorphic-inset rounded-full relative transition-colors bg-secondary/20" id="toggle-humid">
-<div class="absolute top-1 left-7 w-4 h-4 bg-secondary rounded-full shadow-sm transition-all"></div>
-</div>
-<span class="font-label-md text-label-md text-on-surface">Humidity</span>
-</label>
-<label class="flex items-center space-x-2 cursor-pointer group" onclick="toggleMetric(this,'co2','outline')">
-<div class="w-12 h-6 neumorphic-inset rounded-full relative transition-colors" id="toggle-co2">
-<div class="absolute top-1 left-1 w-4 h-4 bg-outline rounded-full shadow-sm transition-all" id="dot-co2"></div>
-</div>
-<span class="font-label-md text-label-md text-on-surface-variant" id="label-co2">CO2</span>
-</label>
-</div>
-</div>
-<!-- Central Chart Area -->
-<div class="relative p-8 bg-surface rounded-3xl neumorphic-convex overflow-hidden">
-<div class="flex justify-between items-center mb-8">
-<div class="flex items-center space-x-8">
-<div class="flex items-center">
-<div class="w-3 h-3 rounded-full bg-primary mr-2 shadow-[0_0_8px_rgba(61,103,81,0.4)]"></div>
-<span class="font-label-md text-label-md text-on-surface">Temp (°C)</span>
-</div>
-<div class="flex items-center">
-<div class="w-3 h-3 rounded-full bg-secondary mr-2 shadow-[0_0_8px_rgba(54,102,102,0.4)]"></div>
-<span class="font-label-md text-label-md text-on-surface">Humidity (%)</span>
-</div>
-</div>
-<div class="flex space-x-2">
-<button onclick="zoomChart()" class="material-symbols-outlined p-2 neumorphic-convex-sm rounded-lg text-on-surface-variant active:scale-95 transition-all">zoom_in</button>
-<button onclick="refreshChart()" class="material-symbols-outlined p-2 neumorphic-convex-sm rounded-lg text-on-surface-variant active:scale-95 transition-all" id="refresh-btn">refresh</button>
-</div>
-</div>
-<!-- Placeholder for Chart Graphics -->
-<div class="h-[400px] w-full relative flex items-end justify-between px-4 pb-8 neumorphic-inset rounded-2xl bg-[#fafbfc]">
-<!-- Vertical Grid Lines -->
-<div class="absolute inset-0 flex justify-between px-10 pointer-events-none opacity-50">
-<div class="w-px h-full bg-outline-variant"></div>
-<div class="w-px h-full bg-outline-variant"></div>
-<div class="w-px h-full bg-outline-variant"></div>
-<div class="w-px h-full bg-outline-variant"></div>
-<div class="w-px h-full bg-outline-variant"></div>
-</div>
-<!-- Pseudo-Chart Lines using SVG -->
-<div class="absolute inset-x-8 inset-y-12">
-<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 1000 400">
-<!-- Temperature Line -->
-<path d="M0,320 Q100,280 200,300 T400,200 T600,240 T800,160 T1000,180" fill="none" stroke="#3d6751" stroke-linecap="round" stroke-width="4"></path>
-<!-- Humidity Line -->
-<path d="M0,200 Q150,220 300,100 T500,150 T700,80 T900,120 T1000,110" fill="none" stroke="#366666" stroke-dasharray="8 4" stroke-linecap="round" stroke-width="4"></path>
-<!-- Active Data Point -->
-<circle cx="400" cy="200" fill="white" r="8" stroke="#3d6751" stroke-width="3"></circle>
-<circle cx="400" cy="120" fill="white" r="8" stroke="#366666" stroke-width="3"></circle>
-</svg>
-</div>
-<!-- Tooltip -->
-<div class="absolute top-24 left-[42%] neumorphic-convex bg-white p-3 rounded-lg z-10 border border-white/50">
-<p class="font-label-sm text-label-sm text-outline mb-1">Oct 14, 08:30 AM</p>
-<p class="font-label-md text-label-md text-primary">Temp: 24.2°C</p>
-<p class="font-label-md text-label-md text-secondary">Humidity: 88%</p>
-</div>
-</div>
-<div class="flex justify-between mt-4 px-10">
-<span class="font-label-sm text-label-sm text-outline">Mon</span>
-<span class="font-label-sm text-label-sm text-outline">Tue</span>
-<span class="font-label-sm text-label-sm text-outline">Wed</span>
-<span class="font-label-sm text-label-sm text-outline">Thu</span>
-<span class="font-label-sm text-label-sm text-outline">Fri</span>
-<span class="font-label-sm text-label-sm text-outline">Sat</span>
-<span class="font-label-sm text-label-sm text-outline">Sun</span>
-</div>
-</div>
-<!-- Detailed Stats Cards -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-<!-- Temperature Cluster -->
-<div class="p-6 bg-surface rounded-2xl neumorphic-convex space-y-6 border-l-4 border-primary">
-<div class="flex items-center space-x-3">
-<span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg">thermostat</span>
-<h3 class="font-headline-md text-headline-md text-on-surface">Temperature</h3>
-</div>
-<div class="grid grid-cols-3 gap-4">
-<div class="text-center">
-<p class="text-on-surface-variant font-label-sm text-label-sm mb-1 uppercase tracking-wider">Average</p>
-<div class="py-3 neumorphic-inset rounded-xl">
-<span class="font-headline-md text-headline-md text-on-surface">23.8°</span>
-</div>
-</div>
-<div class="text-center">
-<p class="text-on-surface-variant font-label-sm text-label-sm mb-1 uppercase tracking-wider">Peak</p>
-<div class="py-3 neumorphic-inset rounded-xl bg-tertiary-container/10">
-<span class="font-headline-md text-headline-md text-tertiary">26.1°</span>
-</div>
-</div>
-<div class="text-center">
-<p class="text-on-surface-variant font-label-sm text-label-sm mb-1 uppercase tracking-wider">Minimum</p>
-<div class="py-3 neumorphic-inset rounded-xl">
-<span class="font-headline-md text-headline-md text-on-surface">22.4°</span>
-</div>
-</div>
-</div>
-</div>
-<!-- Humidity Cluster -->
-<div class="p-6 bg-surface rounded-2xl neumorphic-convex space-y-6 border-l-4 border-secondary">
-<div class="flex items-center space-x-3">
-<span class="material-symbols-outlined text-secondary bg-secondary/10 p-2 rounded-lg">humidity_mid</span>
-<h3 class="font-headline-md text-headline-md text-on-surface">Humidity</h3>
-</div>
-<div class="grid grid-cols-3 gap-4">
-<div class="text-center">
-<p class="text-on-surface-variant font-label-sm text-label-sm mb-1 uppercase tracking-wider">Average</p>
-<div class="py-3 neumorphic-inset rounded-xl">
-<span class="font-headline-md text-headline-md text-on-surface">86%</span>
-</div>
-</div>
-<div class="text-center">
-<p class="text-on-surface-variant font-label-sm text-label-sm mb-1 uppercase tracking-wider">Peak</p>
-<div class="py-3 neumorphic-inset rounded-xl">
-<span class="font-headline-md text-headline-md text-on-surface">92%</span>
-</div>
-</div>
-<div class="text-center">
-<p class="text-on-surface-variant font-label-sm text-label-sm mb-1 uppercase tracking-wider">Minimum</p>
-<div class="py-3 neumorphic-inset rounded-xl bg-error-container/10">
-<span class="font-headline-md text-headline-md text-error">74%</span>
-</div>
-</div>
-</div>
-</div>
-<!-- Growth Progress / Prediction -->
-<div class="p-6 bg-surface rounded-2xl neumorphic-convex flex flex-col justify-between">
-<div class="flex justify-between items-start">
-<h3 class="font-headline-md text-headline-md text-on-surface">Maturity Status</h3>
-<span class="px-3 py-1 bg-primary-container text-on-primary-container rounded-full font-label-sm text-label-sm">Fruiting Stage</span>
-</div>
-<div class="relative py-4">
-<div class="h-4 w-full bg-surface-container rounded-full neumorphic-inset overflow-hidden">
-<div class="h-full w-[68%] bg-gradient-to-r from-primary to-primary-container rounded-full shadow-[0_0_12px_rgba(61,103,81,0.3)]"></div>
-</div>
-<div class="flex justify-between mt-2">
-<span class="font-label-sm text-label-sm text-on-surface-variant">Current Cycle</span>
-<span class="font-label-md text-label-md text-primary font-bold">68% Complete</span>
-</div>
-</div>
-<div class="pt-4 border-t border-outline-variant flex items-center justify-between">
-<div class="flex items-center space-x-2">
-<span class="material-symbols-outlined text-tertiary">calendar_today</span>
-<span class="font-label-sm text-label-sm text-on-surface-variant">Est. Harvest</span>
-</div>
-<span class="font-label-md text-label-md text-on-surface font-semibold">Oct 22, 2023</span>
-</div>
-</div>
-</div>
-<!-- Secondary Data Visualization - Async Mosaic -->
-<div class="grid grid-cols-1 lg:grid-cols-4 gap-gutter">
-<div class="lg:col-span-1 p-6 bg-surface rounded-2xl neumorphic-convex space-y-4">
-<p class="font-label-md text-label-md text-on-surface-variant font-semibold">CO2 Levels (ppm)</p>
-<div class="flex items-center justify-center p-8">
-<div class="relative w-32 h-32 flex items-center justify-center">
-<svg class="w-full h-full -rotate-90">
-<circle class="text-surface-container-highest neumorphic-inset" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-width="12"></circle>
-<circle class="text-tertiary" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-dasharray="364" stroke-dashoffset="100" stroke-linecap="round" stroke-width="12"></circle>
-</svg>
-<div class="absolute inset-0 flex flex-col items-center justify-center">
-<span class="font-headline-md text-headline-md text-on-surface">850</span>
-<span class="font-label-sm text-label-sm text-outline">Healthy</span>
-</div>
-</div>
-</div>
-</div>
-<div class="lg:col-span-3 h-full rounded-2xl overflow-hidden neumorphic-convex group relative min-h-[200px]">
-<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A professional, close-up macro shot of healthy mycelium growth in a controlled laboratory environment. Soft, glowing ambient lighting highlights the intricate white organic structures against a clean, modern lab background. The visual style is minimalist and high-tech, incorporating the botanical precision aesthetic with pastel greens and clinical whites." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIBbYnhwP8NMBGcP9n8tklnuWkwUzwPJ0BCgBLSSYqOoYvnBTaYTfydo756GixC6w_XQksEob9P_qveAjrPSIbCis6vN4R4oPkJV0SXwq5sCxdctU8IGm4876zBabhzEqj7UK4Hzm3lDNd2evIV0AdKKmmVDr0Kr47nFWLl0HGOtkmKJ3gQfdQgp_7haS7UwKSruwLKF_CGKRt3Jj25OUlGQtSvlPW34NSE4GIDNCYeL2-Sq_d7BAcBSmxZAdz5TnVykAONwsVBP4"/>
-<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8">
-<div class="text-white">
-<h4 class="font-headline-md text-headline-md">Batch 4402 - Active Monitoring</h4>
-<p class="font-body-md text-body-md opacity-80">Vision System tracking structural density and color variance.</p>
-</div>
-</div>
-</div>
-</div>
-<!-- Toast -->
-<div id="toast" style="position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(8px);z-index:9999;padding:12px 24px;background:#2e3132;color:#f0f1f2;border-radius:12px;font-size:14px;font-weight:500;opacity:0;pointer-events:none;transition:all 0.3s ease;white-space:nowrap;">Toast</div>
 
-<!-- Notifications Panel -->
-<div id="notif-panel" style="display:none;position:fixed;top:80px;right:32px;z-index:9998;width:300px;" class="bg-surface neumorphic-convex rounded-xl p-4 space-y-3">
-  <h4 class="font-label-md font-bold text-on-surface border-b border-outline-variant pb-2">Notifications</h4>
-  <div class="flex items-start gap-3 p-2 hover:bg-surface-container-high rounded-lg cursor-pointer">
-    <span class="material-symbols-outlined text-primary text-xl mt-0.5">thermostat</span>
-    <div><p class="font-label-md text-on-surface text-sm">Temperature spike detected</p><p class="text-[11px] text-on-surface-variant">Chamber 04-B — 5 min ago</p></div>
-  </div>
-  <div class="flex items-start gap-3 p-2 hover:bg-surface-container-high rounded-lg cursor-pointer">
-    <span class="material-symbols-outlined text-secondary text-xl mt-0.5">water_drop</span>
-    <div><p class="font-label-md text-on-surface text-sm">Mist cycle completed</p><p class="text-[11px] text-on-surface-variant">All chambers — 12 min ago</p></div>
-  </div>
-  <div class="flex items-start gap-3 p-2 hover:bg-surface-container-high rounded-lg cursor-pointer">
-    <span class="material-symbols-outlined text-tertiary text-xl mt-0.5">eco</span>
-    <div><p class="font-label-md text-on-surface text-sm">Batch 4402 entered budding stage</p><p class="text-[11px] text-on-surface-variant">1 hour ago</p></div>
-  </div>
-</div>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden">
+    <!-- TopAppBar - Dashboard ile aynı -->
+    <header class="flex justify-between items-center px-margin-desktop py-4 h-20 bg-surface dark:bg-inverse-surface shadow-md z-40">
+        <h2 class="text-2xl font-bold text-primary">BioGrow Lab</h2>
+        <div class="flex items-center gap-6">
+            <span onclick="toggleTheme()" class="material-symbols-outlined cursor-pointer" id="theme-icon">dark_mode</span>
+            <div class="w-10 h-10 rounded-full neumorphic-convex overflow-hidden border-2 border-white cursor-pointer" onclick="document.getElementById('profile-upload').click()">
+                <input type="file" id="profile-upload" class="hidden" accept="image/*" onchange="uploadProfile(event)"/>
+                <img id="profile-img" class="w-full h-full object-cover" src="https://via.placeholder.com/40"/>
+            </div>
+        </div>
+    </header>
 
-<!-- New Batch Modal -->
-<div id="new-batch-modal" style="display:none;position:fixed;inset:0;z-index:9997;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);align-items:center;justify-content:center;">
-  <div class="bg-surface neumorphic-convex rounded-2xl p-8 w-full max-w-md mx-4 space-y-6" style="margin:auto;">
-    <div class="flex justify-between items-center">
-      <h3 class="font-headline-md text-on-surface">New Cultivation Batch</h3>
-      <button onclick="closeNewBatchModal()" class="material-symbols-outlined text-on-surface-variant hover:text-on-surface transition-colors">close</button>
-    </div>
-    <div class="space-y-4">
-      <div>
-        <label class="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-1">Batch ID</label>
-        <div class="neumorphic-inset rounded-xl px-4 py-3">
-          <input type="text" placeholder="e.g. Batch-4403" class="bg-transparent border-none outline-none w-full font-label-md text-on-surface" id="batch-id" />
-        </div>
-      </div>
-      <div>
-        <label class="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-1">Cultivar Type</label>
-        <div class="neumorphic-inset rounded-xl px-4 py-3">
-          <select class="bg-transparent border-none outline-none w-full font-label-md text-on-surface" id="batch-type">
-            <option>Oyster Mushroom</option><option>Shiitake</option><option>Lion's Mane</option><option>Reishi</option><option>King Trumpet</option>
-          </select>
-        </div>
-      </div>
-      <div>
-        <label class="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-1">Chamber</label>
-        <div class="neumorphic-inset rounded-xl px-4 py-3">
-          <select class="bg-transparent border-none outline-none w-full font-label-md text-on-surface">
-            <option>Chamber 04-B</option><option>Chamber 05-A</option><option>Chamber 06-C</option>
-          </select>
-        </div>
-      </div>
-    </div>
-    <div class="flex gap-3 pt-2">
-      <button onclick="closeNewBatchModal()" class="flex-1 py-3 bg-surface neumorphic-convex rounded-xl font-label-md text-on-surface-variant active:scale-95 transition-all">Cancel</button>
-      <button onclick="createBatch()" class="flex-1 py-3 bg-primary text-on-primary rounded-xl font-label-md neumorphic-convex-sm active:scale-95 transition-all">Create Batch</button>
-    </div>
-  </div>
-</div>
+    <!-- Scrollable İçerik -->
+    <div class="flex-1 overflow-y-auto p-margin-desktop">
+        <div class="max-w-container-max mx-auto space-y-8">
+            <!-- Başlık ve Export Butonları -->
+            <div class="flex flex-wrap justify-between items-center gap-4">
+                <h1 class="text-3xl font-bold text-on-surface dark:text-inverse-on-surface">Growth Analytics</h1>
+                <div class="flex gap-3">
+                    <button onclick="downloadCSV()" class="flex items-center gap-2 px-5 py-2 bg-surface neumorphic-convex-sm rounded-xl text-primary font-semibold text-sm">
+                        <span class="material-symbols-outlined text-base">download</span> CSV
+                    </button>
+                    <button onclick="exportPDF()" class="flex items-center gap-2 px-5 py-2 bg-primary text-white rounded-xl neumorphic-convex-sm font-semibold text-sm">
+                        <span class="material-symbols-outlined text-base">picture_as_pdf</span> PDF Rapor
+                    </button>
+                </div>
+            </div>
 
-<!-- Logout Modal -->
-<div id="logout-modal" style="display:none;position:fixed;inset:0;z-index:9997;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);align-items:center;justify-content:center;">
-  <div class="bg-surface neumorphic-convex rounded-2xl p-8 w-full max-w-sm mx-4 space-y-6 text-center" style="margin:auto;">
-    <span class="material-symbols-outlined text-error" style="font-size:48px">logout</span>
-    <div>
-      <h3 class="font-headline-md text-on-surface">Log out?</h3>
-      <p class="font-label-md text-on-surface-variant mt-1">You will be redirected to the login screen.</p>
+            <!-- Kontrol Paneli: Zaman aralığı + Metrik seçim + Zoom/Refresh -->
+            <div class="neumorphic-convex p-4 rounded-xl bg-surface dark:bg-inverse-surface">
+                <div class="flex flex-wrap justify-between items-center gap-4">
+                    <div class="flex gap-2" id="time-tabs">
+                        <button data-range="24h" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-sm text-on-surface dark:text-inverse-on-surface">24h</button>
+                        <button data-range="7d" class="px-4 py-2 rounded-lg bg-green-600 text-white text-sm">7d</button>
+                        <button data-range="30d" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-sm text-on-surface dark:text-inverse-on-surface">30d</button>
+                        <button data-range="90d" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-sm text-on-surface dark:text-inverse-on-surface">90d</button>
+                    </div>
+                    
+                    <!-- Modern Metrik Seçim Butonları -->
+                    <div class="flex flex-wrap gap-3" id="metric-buttons">
+                        <button data-metric="temp" class="metric-chip active px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium">
+                            <span class="material-symbols-outlined text-base">thermostat</span> Sıcaklık
+                        </button>
+                        <button data-metric="humid" class="metric-chip active px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium">
+                            <span class="material-symbols-outlined text-base">humidity_mid</span> Nem
+                        </button>
+                        <button data-metric="co2" class="metric-chip px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium">
+                            <span class="material-symbols-outlined text-base">cloud</span> CO₂
+                        </button>
+                        <button data-metric="soil" class="metric-chip px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium">
+                            <span class="material-symbols-outlined text-base">grass</span> Toprak Nemi
+                        </button>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button onclick="zoomChart()" class="material-symbols-outlined p-2 neumorphic-convex-sm rounded-lg text-on-surface-variant dark:text-inverse-on-surface/70">zoom_in</button>
+                        <button onclick="refreshChart()" class="material-symbols-outlined p-2 neumorphic-convex-sm rounded-lg text-on-surface-variant dark:text-inverse-on-surface/70" id="refresh-btn">refresh</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grafik Alanı -->
+            <div class="neumorphic-convex p-6 rounded-xl bg-surface dark:bg-inverse-surface">
+                <canvas id="mainChart" height="300" style="max-height:400px; width:100%"></canvas>
+            </div>
+
+            <!-- İstatistik Kartları (5 adet) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-6">
+                <div class="neumorphic-convex p-4 rounded-xl text-center bg-surface dark:bg-inverse-surface">
+                    <p class="text-sm text-on-surface-variant dark:text-inverse-on-surface/70">Ort. Sıcaklık</p>
+                    <p class="text-2xl font-bold text-on-surface dark:text-inverse-on-surface" id="avgTemp">-- °C</p>
+                </div>
+                <div class="neumorphic-convex p-4 rounded-xl text-center bg-surface dark:bg-inverse-surface">
+                    <p class="text-sm text-on-surface-variant dark:text-inverse-on-surface/70">Ort. Nem</p>
+                    <p class="text-2xl font-bold text-on-surface dark:text-inverse-on-surface" id="avgHum">-- %</p>
+                </div>
+                <div class="neumorphic-convex p-4 rounded-xl text-center bg-surface dark:bg-inverse-surface">
+                    <p class="text-sm text-on-surface-variant dark:text-inverse-on-surface/70">Ort. CO₂</p>
+                    <p class="text-2xl font-bold text-on-surface dark:text-inverse-on-surface" id="avgCo2">-- ppm</p>
+                </div>
+                <div class="neumorphic-convex p-4 rounded-xl text-center bg-surface dark:bg-inverse-surface">
+                    <p class="text-sm text-on-surface-variant dark:text-inverse-on-surface/70">Ort. Toprak Nemi</p>
+                    <p class="text-2xl font-bold text-on-surface dark:text-inverse-on-surface" id="avgSoil">-- %</p>
+                </div>
+                <div class="neumorphic-convex p-4 rounded-xl text-center bg-surface dark:bg-inverse-surface">
+                    <p class="text-sm text-on-surface-variant dark:text-inverse-on-surface/70">Son Ölçüm</p>
+                    <p class="text-xs font-mono text-on-surface dark:text-inverse-on-surface" id="lastTime">--</p>
+                </div>
+            </div>
+
+            <!-- Maturity Status ve CO2 Donut -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="neumorphic-convex p-6 rounded-xl bg-surface dark:bg-inverse-surface">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-semibold text-lg text-on-surface dark:text-inverse-on-surface">Maturity Status</h3>
+                        <span class="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs">Fruiting Stage</span>
+                    </div>
+                    <div class="relative py-2">
+                        <div class="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded-full neumorphic-inset overflow-hidden">
+                            <div class="h-full w-[68%] bg-gradient-to-r from-green-600 to-green-400 rounded-full shadow-md" id="maturity-bar"></div>
+                        </div>
+                        <div class="flex justify-between mt-2 text-sm">
+                            <span class="text-on-surface-variant dark:text-inverse-on-surface/70">Current Cycle</span>
+                            <span class="font-bold text-green-700 dark:text-green-400" id="maturity-percent">68% Complete</span>
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-amber-600">calendar_today</span>
+                            <span class="text-sm text-on-surface-variant dark:text-inverse-on-surface/70">Est. Harvest</span>
+                        </div>
+                        <span class="font-semibold text-on-surface dark:text-inverse-on-surface" id="est-harvest">Oct 22, 2025</span>
+                    </div>
+                </div>
+
+                <div class="neumorphic-convex p-6 rounded-xl bg-surface dark:bg-inverse-surface flex flex-col items-center">
+                    <h3 class="font-semibold text-lg mb-3 text-on-surface dark:text-inverse-on-surface">Anlık CO₂ Seviyesi</h3>
+                    <div class="relative w-40 h-40">
+                        <canvas id="co2Donut" width="160" height="160"></canvas>
+                        <div class="absolute inset-0 flex items-center justify-center flex-col">
+                            <span id="liveCo2" class="text-2xl font-bold text-on-surface dark:text-inverse-on-surface">--</span>
+                            <span class="text-xs text-on-surface-variant dark:text-inverse-on-surface/70">ppm</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-on-surface-variant dark:text-inverse-on-surface/70 mt-4" id="co2-advice">Normal seviye</p>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="flex gap-3">
-      <button onclick="document.getElementById('logout-modal').style.display='none'" class="flex-1 py-3 bg-surface neumorphic-convex rounded-xl font-label-md text-on-surface-variant active:scale-95 transition-all">Cancel</button>
-      <button onclick="showToast('Logged out');document.getElementById('logout-modal').style.display='none'" class="flex-1 py-3 bg-error text-on-error rounded-xl font-label-md neumorphic-convex-sm active:scale-95 transition-all">Log Out</button>
-    </div>
-  </div>
-</div>
+</main>
+
+<!-- Toast Bildirimi -->
+<div id="toast" class="fixed bottom-8 left-1/2 transform -translate-x-1/2 px-6 py-3 bg-black text-white rounded-xl text-sm opacity-0 pointer-events-none transition-all duration-300 z-[999]">Mesaj</div>
+
+
 
 <script>
-  // Toast
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.style.opacity = '1';
-    t.style.transform = 'translateX(-50%) translateY(0)';
-    setTimeout(() => {
-      t.style.opacity = '0';
-      t.style.transform = 'translateX(-50%) translateY(8px)';
-    }, 2800);
-  }
+    // --- Global değişkenler ---
+    let chart, donutChart;
+    let rawData = [];
+    let currentRange = '7d';
+    let showTemp = true, showHum = true, showCo2 = false, showSoil = false;
+    let zoomed = false;
 
-  // Notifications
-  function toggleNotifications() {
-    const p = document.getElementById('notif-panel');
-    p.style.display = p.style.display === 'none' ? 'block' : 'none';
-  }
-  document.addEventListener('click', function(e) {
-    const p = document.getElementById('notif-panel');
-    if (!p.contains(e.target) && !e.target.closest('button[onclick="toggleNotifications()"]')) {
-      p.style.display = 'none';
+    const API_BASE = '';
+
+    // --- Yardımcı fonksiyonlar ---
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.innerText = msg;
+        t.classList.remove('opacity-0', 'translate-y-0');
+        t.classList.add('opacity-100', '-translate-y-2');
+        setTimeout(() => {
+            t.classList.remove('opacity-100', '-translate-y-2');
+            t.classList.add('opacity-0', 'translate-y-0');
+        }, 2800);
     }
-  });
 
-  // New Batch Modal
-  function openNewBatchModal() {
-    const m = document.getElementById('new-batch-modal');
-    m.style.display = 'flex';
-  }
-  function closeNewBatchModal() {
-    document.getElementById('new-batch-modal').style.display = 'none';
-  }
-  function createBatch() {
-    const id = document.getElementById('batch-id').value.trim() || 'Batch-4403';
-    const type = document.getElementById('batch-type').value;
-    closeNewBatchModal();
-    showToast(`✓ ${id} (${type}) created successfully`);
-  }
-  document.getElementById('new-batch-modal').addEventListener('click', function(e) {
-    if (e.target === this) closeNewBatchModal();
-  });
+    function formatDate(iso, range) {
+        let d = new Date(iso);
+        if(range === '24h') return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+        if(range === '7d') return d.toLocaleDateString([], {weekday:'short'});
+        return d.toLocaleDateString([], {month:'short', day:'numeric'});
+    }
 
-  // Logout
-  function confirmLogout() {
-    document.getElementById('logout-modal').style.display = 'flex';
-  }
-  document.getElementById('logout-modal').addEventListener('click', function(e) {
-    if (e.target === this) this.style.display = 'none';
-  });
+    function filterByRange(data, range) {
+        let now = new Date();
+        let start = new Date();
+        if(range === '24h') start.setDate(now.getDate()-1);
+        else if(range === '7d') start.setDate(now.getDate()-7);
+        else if(range === '30d') start.setDate(now.getDate()-30);
+        else if(range === '90d') start.setDate(now.getDate()-90);
+        else start = new Date(0);
+        return data.filter(d => new Date(d.zaman) >= start);
+    }
 
-  // Time Range Tabs
-  function setTimeRange(btn, range) {
-    document.querySelectorAll('#time-tabs button').forEach(b => {
-      b.className = 'px-6 py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors';
+    function computeStats(filtered) {
+        if(!filtered.length) return;
+        let temps = filtered.map(d=>d.sicaklik).filter(v=>v!==undefined);
+        let hums = filtered.map(d=>d.nem).filter(v=>v!==undefined);
+        let co2s = filtered.map(d=>d.co2).filter(v=>v!==undefined);
+        let soils = filtered.map(d=>d.toprak_nemi).filter(v=>v!==undefined);
+        if(temps.length) document.getElementById('avgTemp').innerText = (temps.reduce((a,b)=>a+b,0)/temps.length).toFixed(1)+'°C';
+        if(hums.length) document.getElementById('avgHum').innerText = Math.round(hums.reduce((a,b)=>a+b,0)/hums.length)+'%';
+        if(co2s.length) document.getElementById('avgCo2').innerText = Math.round(co2s.reduce((a,b)=>a+b,0)/co2s.length)+' ppm';
+        if(soils.length) document.getElementById('avgSoil').innerText = Math.round(soils.reduce((a,b)=>a+b,0)/soils.length)+'%';
+        let last = filtered[filtered.length-1];
+        if(last && last.zaman) document.getElementById('lastTime').innerText = new Date(last.zaman).toLocaleString();
+        if(last && last.co2 !== undefined) {
+            document.getElementById('liveCo2').innerText = last.co2;
+            let percent = Math.min(100, (last.co2/2000)*100);
+            if(donutChart) {
+                donutChart.data.datasets[0].data = [percent, 100-percent];
+                donutChart.update();
+            } else createDonut(percent);
+            let advice = document.getElementById('co2-advice');
+            if(last.co2 > 1000) advice.innerText = '⚠️ Kritik seviye! Havalandırmayı artırın.';
+            else if(last.co2 > 800) advice.innerText = '⚠️ Yüksek seviye, dikkat.';
+            else advice.innerText = '✅ Normal seviye.';
+        }
+        let soilVal = last && last.toprak_nemi ? last.toprak_nemi : 50;
+        let maturity = Math.min(100, Math.max(0, soilVal * 0.8));
+        document.getElementById('maturity-bar').style.width = maturity+'%';
+        document.getElementById('maturity-percent').innerText = Math.round(maturity)+'% Complete';
+    }
+
+    function createDonut(percent) {
+        let ctx = document.getElementById('co2Donut').getContext('2d');
+        if(donutChart) donutChart.destroy();
+        donutChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: { datasets: [{ data: [percent, 100-percent], backgroundColor: ['#85522c', '#e5e7eb'], borderWidth: 0 }] },
+            options: { cutout: '70%', plugins: { tooltip: { enabled: false }, legend: { display: false } } }
+        });
+    }
+
+    function renderChart() {
+        if(!rawData.length) return;
+        let filtered = filterByRange(rawData, currentRange);
+        if(!filtered.length) return;
+        computeStats(filtered);
+        filtered.sort((a,b)=>new Date(a.zaman)-new Date(b.zaman));
+        let labels = filtered.map(d=>formatDate(d.zaman, currentRange));
+        let datasets = [];
+        if(showTemp && filtered[0].sicaklik!==undefined) datasets.push({ label: 'Sıcaklık (°C)', data: filtered.map(d=>d.sicaklik), borderColor: '#3d6751', tension: 0.3, fill: false, yAxisID: 'y' });
+        if(showHum && filtered[0].nem!==undefined) datasets.push({ label: 'Nem (%)', data: filtered.map(d=>d.nem), borderColor: '#366666', borderDash: [5,5], tension: 0.3, fill: false, yAxisID: 'y1' });
+        if(showCo2 && filtered[0].co2!==undefined) datasets.push({ label: 'CO₂ (ppm)', data: filtered.map(d=>d.co2), borderColor: '#85522c', borderDash: [2,4], tension: 0.3, fill: false, yAxisID: 'y2' });
+        if(showSoil && filtered[0].toprak_nemi!==undefined) datasets.push({ label: 'Toprak Nemi (%)', data: filtered.map(d=>d.toprak_nemi), borderColor: '#2563eb', tension: 0.3, fill: false, yAxisID: 'y1' });
+
+        let ctx = document.getElementById('mainChart').getContext('2d');
+        if(chart) chart.destroy();
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: { labels, datasets },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: { tooltip: { mode: 'index', intersect: false } },
+                scales: { y: { title: { display: true, text: 'Sıcaklık (°C)' } }, y1: { title: { display: true, text: 'Nem / Toprak Nemi (%)' }, position: 'right' } }
+            }
+        });
+    }
+
+    // --- CSV Export ---
+    function downloadCSV() {
+        let filtered = filterByRange(rawData, currentRange);
+        if(!filtered.length) { showToast('Veri yok, dışa aktarılamaz.'); return; }
+        let headers = "Zaman,Sıcaklık (°C),Nem (%),CO₂ (ppm),Toprak Nemi (%),Pompa Aktif,Fan Aktif\n";
+        let rows = filtered.map(d => {
+            return `${d.zaman},${d.sicaklik??''},${d.nem??''},${d.co2??''},${d.toprak_nemi??''},${d.pompa_aktif??''},${d.fan_aktif??''}`;
+        }).join("\n");
+        let csv = headers + rows;
+        let blob = new Blob([csv], { type: 'text/csv' });
+        let a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `biogrow_analytics_${currentRange}.csv`;
+        a.click();
+        URL.revokeObjectURL(a.href);
+        showToast('CSV dosyası indiriliyor...');
+    }
+
+    function exportPDF() {
+        showToast('PDF rapor oluşturma simüle edildi.');
+    }
+
+    function zoomChart() {
+        zoomed = !zoomed;
+        let canvasContainer = document.querySelector('#mainChart').parentElement;
+        if(zoomed) canvasContainer.style.height = '550px';
+        else canvasContainer.style.height = 'auto';
+        showToast(zoomed ? 'Büyütüldü' : 'Küçültüldü');
+        if(chart) chart.resize();
+    }
+
+    function refreshChart() {
+        fetchHistory();
+        let btn = document.getElementById('refresh-btn');
+        btn.style.animation = 'spin 0.6s linear';
+        setTimeout(() => btn.style.animation = '', 600);
+        showToast('Veriler yenileniyor...');
+    }
+
+    async function fetchHistory() {
+        try {
+            let res = await fetch(`${API_BASE}/api/gecmis?limit=500`);
+            if(res.ok) { rawData = await res.json(); renderChart(); }
+            else throw new Error();
+        } catch(e) { console.warn(e); showToast('Geçmiş veriler alınamadı'); }
+    }
+
+    // WebSocket
+    let ws;
+    function setupWS() {
+        let protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+        ws = new WebSocket(`${protocol}//${location.host}/ws`);
+        ws.onmessage = (e) => {
+            try {
+                let newPoint = JSON.parse(e.data);
+                rawData.push({ ...newPoint, zaman: new Date().toISOString() });
+                if(rawData.length > 500) rawData.shift();
+                renderChart();
+                if(newPoint.co2 !== undefined) {
+                    let percent = Math.min(100, (newPoint.co2/2000)*100);
+                    if(donutChart) { donutChart.data.datasets[0].data = [percent, 100-percent]; donutChart.update(); }
+                    else createDonut(percent);
+                    document.getElementById('liveCo2').innerText = newPoint.co2;
+                }
+            } catch(err) { console.warn(err); }
+        };
+        ws.onclose = () => setTimeout(setupWS, 3000);
+    }
+
+    // Zaman aralığı değişimi
+    function setRange(range) {
+        currentRange = range;
+        document.querySelectorAll('#time-tabs button').forEach(btn => {
+            btn.classList.remove('bg-green-600', 'text-white');
+            btn.classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-on-surface', 'dark:text-inverse-on-surface');
+        });
+        let active = document.querySelector(`#time-tabs button[data-range="${range}"]`);
+        if(active) { active.classList.add('bg-green-600', 'text-white'); active.classList.remove('bg-gray-200', 'dark:bg-gray-700', 'text-on-surface', 'dark:text-inverse-on-surface'); }
+        renderChart();
+    }
+
+    // Metrik butonları toggle
+    function initMetricButtons() {
+        const buttons = document.querySelectorAll('#metric-buttons .metric-chip');
+        const metricMap = {
+            'temp': () => { showTemp = !showTemp; return showTemp; },
+            'humid': () => { showHum = !showHum; return showHum; },
+            'co2': () => { showCo2 = !showCo2; return showCo2; },
+            'soil': () => { showSoil = !showSoil; return showSoil; }
+        };
+        buttons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const metric = btn.dataset.metric;
+                if (metricMap[metric]) {
+                    const newState = metricMap[metric]();
+                    if (newState) btn.classList.add('active');
+                    else btn.classList.remove('active');
+                    renderChart();
+                    showToast(`${btn.innerText.trim()} ${newState ? 'aktif' : 'pasif'}`);
+                }
+            });
+        });
+    }
+
+    // Tema değiştirme (Dashboard'daki gibi)
+    function toggleTheme() {
+        const html = document.documentElement;
+        html.classList.toggle('dark');
+        const themeIcon = document.getElementById('theme-icon');
+        if (html.classList.contains('dark')) {
+            themeIcon.innerText = 'light_mode';
+        } else {
+            themeIcon.innerText = 'dark_mode';
+        }
+    }
+
+    function uploadProfile(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('profile-img').src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function openNewBatchModal() { document.getElementById('new-batch-modal').classList.remove('hidden'); }
+    function closeNewBatchModal() { document.getElementById('new-batch-modal').classList.add('hidden'); }
+    function createBatch() { closeNewBatchModal(); showToast('Batch oluşturuldu'); }
+
+    // Başlatma
+    document.addEventListener('DOMContentLoaded', () => {
+        initMetricButtons();
+        fetchHistory();
+        setupWS();
+        document.querySelectorAll('#time-tabs button').forEach(btn => btn.addEventListener('click', () => setRange(btn.dataset.range)));
     });
-    btn.className = 'px-6 py-2 rounded-lg font-label-md text-label-md bg-white shadow-sm text-primary font-semibold';
-    showToast(`Viewing ${range} data`);
-  }
-
-  // Metric Toggles
-  const toggleState = { temp: true, humid: true, co2: false };
-  function toggleMetric(label, key, color) {
-    toggleState[key] = !toggleState[key];
-    const wrap = document.getElementById('toggle-' + key);
-    const dot = wrap.querySelector('div');
-    if (toggleState[key]) {
-      dot.style.left = '28px';
-      wrap.style.backgroundColor = `var(--color-${color}, rgba(61,103,81,0.2))`;
-      showToast(key.charAt(0).toUpperCase() + key.slice(1) + ' enabled');
-    } else {
-      dot.style.left = '4px';
-      wrap.style.backgroundColor = '';
-      showToast(key.charAt(0).toUpperCase() + key.slice(1) + ' disabled');
-    }
-  }
-
-  // Download CSV
-  function downloadCSV() {
-    const csv = `Date,Time,Temperature (°C),Humidity (%),CO2 (ppm)\nMon,00:00,23.1,85,820\nMon,06:00,22.8,87,835\nMon,12:00,24.5,82,850\nMon,18:00,24.2,88,860\nTue,00:00,23.5,86,830\nTue,06:00,23.0,84,815\nTue,12:00,24.8,80,845\nTue,18:00,26.1,79,870\nWed,00:00,23.4,83,825\nWed,06:00,22.9,85,840`;
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'BioGrow_Chamber04B_Analytics.csv';
-    a.click();
-    showToast('CSV downloaded successfully');
-  }
-
-  // Export PDF
-  function exportPDF() {
-    showToast('Generating PDF report...');
-    setTimeout(() => showToast('PDF exported successfully'), 1800);
-  }
-
-  // Zoom
-  let zoomed = false;
-  function zoomChart() {
-    zoomed = !zoomed;
-    const chart = document.querySelector('.h-\\[400px\\]');
-    if (chart) chart.style.height = zoomed ? '550px' : '400px';
-    showToast(zoomed ? 'Chart zoomed in' : 'Chart zoomed out');
-  }
-
-  // Refresh
-  function refreshChart() {
-    const btn = document.getElementById('refresh-btn');
-    btn.style.animation = 'spin 0.6s linear';
-    setTimeout(() => btn.style.animation = '', 600);
-    showToast('Data refreshed');
-  }
 </script>
-<style>
-  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-  #toggle-temp div, #toggle-humid div, #toggle-co2 div { transition: left 0.2s ease; }
-</style>
 </body>
+</html>

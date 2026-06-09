@@ -2,7 +2,8 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from db import init_db, kaydet, son_olcum, gecmis
 from models import SensorVeri, Olcum, Basarili
-
+from fastapi.responses import HTMLResponse
+from pathlib import Path
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"],
                    allow_methods=["*"], allow_headers=["*"])
@@ -10,6 +11,28 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"],
 db = init_db()
 websocketler: list[WebSocket] = []
 
+# HTML dosyalarının yolu: backend klasörünün bir üstü (smart-growbox/)
+BASE_DIR = Path(__file__).parent.parent  # bir üst dizin
+
+@app.get("/", response_class=HTMLResponse)
+async def get_dashboard():
+    """Dashboard sayfasını gösterir (index.html)"""
+    index_path = BASE_DIR / "index.html"
+    try:
+        with open(index_path, "r", encoding="utf-8") as f:
+            return f.read()
+    except FileNotFoundError:
+        return HTMLResponse(content=f"<h1>index.html bulunamadı</h1><p>Aranan yol: {index_path}</p>", status_code=404)
+
+@app.get("/analytics", response_class=HTMLResponse)
+async def get_analytics():
+    """Analytics sayfasını gösterir (analytics.html)"""
+    analytics_path = BASE_DIR / "analytics.html"
+    try:
+        with open(analytics_path, "r", encoding="utf-8") as f:
+            return f.read()
+    except FileNotFoundError:
+        return HTMLResponse(content=f"<h1>analytics.html bulunamadı</h1><p>Aranan yol: {analytics_path}</p>", status_code=404)
 # Bridge buraya POST atar
 @app.post("/api/veri", response_model=Basarili)
 async def veri_al(veri: SensorVeri):
@@ -48,3 +71,4 @@ async def ws_endpoint(websocket: WebSocket):
             await websocket.receive_text()  # bağlantıyı canlı tut
     except WebSocketDisconnect:
         websocketler.remove(websocket)
+        

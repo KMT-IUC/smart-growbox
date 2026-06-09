@@ -1,500 +1,262 @@
 <!DOCTYPE html>
-
-<html class="light" lang="en"><head>
+<html class="light" lang="en">
+<head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>BioGrow Lab - Cultivation Dashboard</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Inter', sans-serif;
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+              "inverse-surface": "#2e3132",
+              "inverse-on-surface": "#f0f1f2",
+              "primary": "#3d6751",
+              "secondary": "#366666",
+              "tertiary": "#85522c",
+              "surface": "#f8f9fa",
+              "surface-bright": "#f8f9fa",
+              "on-surface": "#191c1d",
+              "on-surface-variant": "#414943",
+              "error": "#ba1a1a"
+            },
+            "borderRadius": { "DEFAULT": "8px", "lg": "12px", "xl": "16px", "full": "9999px" },
+            "spacing": { "container-max": "1440px", "margin-desktop": "40px", "gutter": "24px" },
+            "fontFamily": { "sans": ['Inter', 'sans-serif'] }
+          }
         }
-        .neumorphic-convex {
-            box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
-        }
-        .neumorphic-convex-sm {
-            box-shadow: 4px 4px 8px #d1d9e6, -4px -4px 8px #ffffff;
-        }
-        .neumorphic-inset {
-            box-shadow: inset 6px 6px 12px #d1d9e6, inset -6px -6px 12px #ffffff;
-        }
-        .neumorphic-convex-right {
-            box-shadow: 8px 0 15px rgba(0,0,0,0.03);
-        }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-    </style>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "inverse-surface": "#2e3132",
-                        "inverse-on-surface": "#f0f1f2",
-                        "tertiary-fixed-dim": "#fcb889",
-                        "on-primary-fixed": "#002113",
-                        "secondary-container": "#b9ecec",
-                        "on-secondary-fixed": "#002020",
-                        "surface-bright": "#f8f9fa",
-                        "surface": "#f8f9fa",
-                        "on-tertiary-fixed": "#301400",
-                        "on-tertiary": "#ffffff",
-                        "on-surface-variant": "#414943",
-                        "on-secondary-container": "#3c6c6c",
-                        "error-container": "#ffdad6",
-                        "on-surface": "#191c1d",
-                        "secondary": "#366666",
-                        "on-error": "#ffffff",
-                        "surface-container-high": "#e7e8e9",
-                        "outline-variant": "#c1c8c1",
-                        "on-secondary": "#ffffff",
-                        "surface-container-lowest": "#ffffff",
-                        "secondary-fixed-dim": "#9ed0cf",
-                        "tertiary-container": "#ffbd90",
-                        "background": "#f8f9fa",
-                        "error": "#ba1a1a",
-                        "on-error-container": "#93000a",
-                        "outline": "#717973",
-                        "primary-fixed-dim": "#a4d1b6",
-                        "primary-container": "#a8d5ba",
-                        "primary": "#3d6751",
-                        "surface-variant": "#e1e3e4",
-                        "surface-container-low": "#f3f4f5",
-                        "primary-fixed": "#bfedd1",
-                        "on-secondary-fixed-variant": "#1b4e4e",
-                        "surface-dim": "#d9dadb",
-                        "tertiary": "#85522c",
-                        "on-primary-container": "#345d48",
-                        "on-background": "#191c1d",
-                        "on-tertiary-fixed-variant": "#693b17",
-                        "surface-container-highest": "#e1e3e4",
-                        "surface-container": "#edeeef",
-                        "tertiary-fixed": "#ffdcc6",
-                        "on-primary-fixed-variant": "#254f3a",
-                        "surface-tint": "#3d6751",
-                        "on-tertiary-container": "#7b4924",
-                        "on-primary": "#ffffff",
-                        "secondary-fixed": "#b9ecec",
-                        "inverse-primary": "#a4d1b6"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "8px",
-                        "lg": "12px",
-                        "xl": "16px",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "container-max": "1440px",
-                        "margin-desktop": "40px",
-                        "margin-mobile": "16px",
-                        "unit": "8px",
-                        "gutter": "24px"
-                    },
-                    "fontFamily": {
-                        "display-lg": ["Inter"],
-                        "label-sm": ["Inter"],
-                        "headline-md": ["Inter"],
-                        "body-md": ["Inter"],
-                        "body-lg": ["Inter"],
-                        "headline-lg": ["Inter"],
-                        "label-md": ["Inter"]
-                    },
-                    "fontSize": {
-                        "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
-                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
-                        "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "500"}],
-                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
-                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
-                        "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
-                        "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.01em", "fontWeight": "500"}]
-                    }
-                }
-            }
-        }
+      }
     </script>
-</head>
-<body class="bg-surface text-on-surface overflow-hidden h-screen flex">
-<!-- SideNavBar Shell -->
-<aside class="hidden md:flex flex-col p-6 space-y-4 h-screen w-64 docked left-0 bg-surface shadow-[8px_0_15px_rgba(0,0,0,0.03)] z-50">
-<div class="flex items-center gap-3 mb-8">
-<div class="w-10 h-10 rounded-xl neumorphic-convex flex items-center justify-center bg-primary-container text-on-primary-container">
-<span class="material-symbols-outlined" data-icon="biotech">biotech</span>
-</div>
-<div>
-<h1 class="font-headline-lg text-primary text-lg">System Core</h1>
-<p class="font-label-sm text-on-surface-variant text-[10px]">v2.4 Organic Lab</p>
-</div>
-</div>
-<nav class="flex-1 space-y-3">
-<div class="flex items-center gap-3 p-3 bg-primary-container text-on-primary-container rounded-xl shadow-[inset_4px_4px_8px_rgba(0,0,0,0.1),inset_-4px_-4px_8px_rgba(255,255,255,0.7)] cursor-pointer">
-<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
-<span class="font-label-md">Dashboard</span>
-</div>
-<div onclick="showToast('Chambers module coming soon')" class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-all cursor-pointer hover:translate-x-1">
-<span class="material-symbols-outlined" data-icon="Potted_Plant">potted_plant</span>
-<span class="font-label-md">Chambers</span>
-</div>
-<div onclick="showToast('Cultivation module coming soon')" class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-all cursor-pointer hover:translate-x-1">
-<span class="material-symbols-outlined" data-icon="biotech">biotech</span>
-<span class="font-label-md">Cultivation</span>
-</div>
-<a href="analytics.html" class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-all cursor-pointer hover:translate-x-1 block">
-  <span class="material-symbols-outlined" data-icon="bar_chart">bar_chart</span>
-  <span class="font-label-md">Analytics</span>
-</a>
-<div onclick="showToast('Lab Settings coming soon')" class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-all cursor-pointer hover:translate-x-1">
-<span class="material-symbols-outlined" data-icon="settings">settings</span>
-<span class="font-label-md">Lab Settings</span>
-</div>
-</nav>
-<button onclick="openNewBatchModal()" class="w-full py-3 mb-6 bg-surface neumorphic-convex rounded-xl text-primary font-bold hover:translate-y-[-2px] active:scale-95 transition-all">
-            New Batch
-        </button>
-<div class="pt-6 border-t border-surface-variant space-y-2">
-<div onclick="showToast('Opening support documentation...')" class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl cursor-pointer">
-<span class="material-symbols-outlined" data-icon="help">help</span>
-<span class="font-label-md">Support</span>
-</div>
-<div onclick="confirmLogout()" class="flex items-center gap-3 p-3 text-error hover:bg-error-container rounded-xl cursor-pointer">
-<span class="material-symbols-outlined" data-icon="logout">logout</span>
-<span class="font-label-md">Logout</span>
-</div>
-</div>
-</aside>
-<!-- Main Viewport -->
-<main class="flex-1 flex flex-col h-screen overflow-hidden">
-<!-- TopAppBar Shell -->
-<header class="flex justify-between items-center w-full px-margin-desktop py-4 h-20 bg-surface shadow-[4px_4px_10px_rgba(0,0,0,0.05),-4px_-4px_10px_rgba(255,255,255,0.8)] z-40">
-<div class="flex items-center gap-4">
-<h2 class="font-display-lg text-primary text-2xl font-bold">BioGrow Lab</h2>
-</div>
-<div class="flex-1 max-w-md px-8">
-<div class="neumorphic-inset flex items-center px-4 py-2 rounded-full w-full">
-<span class="material-symbols-outlined text-outline" data-icon="search">search</span>
-<input class="bg-transparent border-none focus:ring-0 w-full text-label-md ml-2 outline-none" placeholder="Search cultivars..." type="text"/>
-</div>
-</div>
-<div class="flex items-center gap-6">
-<div class="flex gap-4">
-<span onclick="toggleNotifications()" class="material-symbols-outlined text-on-surface-variant cursor-pointer active:scale-95 transition-all relative" data-icon="notifications">notifications</span>
-<span onclick="showToast('Lab Settings coming soon')" class="material-symbols-outlined text-on-surface-variant cursor-pointer active:scale-95 transition-all" data-icon="settings">settings</span>
-</div>
-<div class="w-10 h-10 rounded-full neumorphic-convex overflow-hidden border-2 border-white">
-<img alt="Chief Mycologist Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a female mycologist in a clean white laboratory environment. She is wearing a modern white lab coat and has a friendly, focused expression. The background is softly blurred, showing hints of high-tech laboratory glassware and green biological samples. The lighting is bright and airy, consistent with a professional medical or scientific setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHUxb7z1HAALjUcgx9_QYl2llilIe4zziKOHfV-szXK_3qSRz15LLCZT580NA3-33U2IIAv1jRk2dzXzLgZlwVXpsp5q1GcJuf2bgpkds5rQIJiEs_N13eLbb71BoD4NX21f2MfZHViv3VaomFO4WnC1yZsv702P89TjYfefXC_QSBGRiMZ49zmelkuK8YP09kc2bJr6nDGCQJYDGpAyOFywMcqeT6r-fQSf_b9IH92TPNmXEoEg0ARCDzWLLZpOC8fL0piGjaISo"/>
-</div>
-</div>
-</header>
-<!-- Content Canvas -->
-<div class="flex-1 overflow-y-auto p-margin-desktop scroll-smooth">
-<div class="max-w-container-max mx-auto grid grid-cols-12 gap-gutter">
-<!-- Metrics Row -->
-<section class="col-span-12 grid grid-cols-1 md:grid-cols-3 gap-gutter mb-8">
-<!-- Temperature Gauge -->
-<div class="neumorphic-convex p-6 bg-surface rounded-xl flex flex-col items-center justify-center relative min-h-[220px]">
-<h3 class="font-label-md text-on-surface-variant absolute top-6 left-6">Temperature</h3>
-<div class="w-32 h-32 rounded-full neumorphic-inset flex items-center justify-center relative">
-<div class="absolute inset-0 rounded-full border-[10px] border-surface-container-high"></div>
-<div class="absolute inset-0 rounded-full border-[10px] border-primary border-t-transparent border-l-transparent transform rotate-45 shadow-[0_0_15px_rgba(61,103,81,0.3)]"></div>
-<span class="font-display-lg text-primary">24.5<span class="text-xl">°C</span></span>
-</div>
-<p class="font-label-sm text-primary mt-4">Optimal Range</p>
-</div>
-<!-- Humidity Dial -->
-<div class="neumorphic-convex p-6 bg-surface rounded-xl flex flex-col items-center justify-center relative min-h-[220px]">
-<h3 class="font-label-md text-on-surface-variant absolute top-6 left-6">Humidity</h3>
-<div class="w-32 h-32 rounded-full neumorphic-inset flex items-center justify-center">
-<div class="absolute w-24 h-24 rounded-full border-4 border-secondary opacity-20"></div>
-<span class="font-display-lg text-secondary">82<span class="text-xl">%</span></span>
-</div>
-<div class="mt-4 flex gap-2">
-<span class="w-2 h-2 rounded-full bg-secondary"></span>
-<span class="w-2 h-2 rounded-full bg-surface-container-high"></span>
-<span class="w-2 h-2 rounded-full bg-surface-container-high"></span>
-</div>
-</div>
-<!-- CO2 Meter -->
-<div class="neumorphic-convex p-6 bg-surface rounded-xl flex flex-col justify-between relative min-h-[220px]">
-<h3 class="font-label-md text-on-surface-variant">CO2 Concentration</h3>
-<div class="flex-1 flex flex-col justify-center gap-4">
-<div class="flex justify-between items-end">
-<span class="font-display-lg text-tertiary">840<span class="text-sm font-label-md ml-1">PPM</span></span>
-<span class="font-label-sm text-error">Elevated</span>
-</div>
-<div class="h-4 w-full neumorphic-inset rounded-full overflow-hidden">
-<div class="h-full bg-tertiary w-[75%] rounded-r-full shadow-[0_0_10px_rgba(133,82,44,0.4)]"></div>
-</div>
-</div>
-<p class="font-label-sm text-on-surface-variant">Ventilation active since 08:45</p>
-</div>
-</section>
-<!-- Center Section: Chamber Visualization -->
-<section class="col-span-12 lg:col-span-8"><div class="neumorphic-convex bg-surface rounded-xl p-8 h-full min-h-[500px] flex flex-col">
-<div class="flex justify-between items-center mb-8">
-<h3 class="font-headline-md text-on-surface">Live Growth Progress</h3>
-<div class="flex gap-4">
-<div class="flex items-center gap-2 px-3 py-1 bg-surface neumorphic-convex-sm rounded-full">
-<span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
-<span class="font-label-sm">Active Grow</span>
-</div>
-</div>
-</div>
-<div class="flex-1 neumorphic-inset rounded-xl p-8 relative flex items-center justify-center bg-surface-container-lowest overflow-hidden">
-<!-- Animated Growth Stages -->
-<div class="relative w-full h-full flex items-center justify-center">
 <style>
-                @keyframes plantGrowth {
-                    0%, 15% { transform: translateX(40%); clip-path: inset(0 80% 0 0); }
-                    20%, 35% { transform: translateX(20%); clip-path: inset(0 60% 0 20%); }
-                    40%, 55% { transform: translateX(0%); clip-path: inset(0 40% 0 40%); }
-                    60%, 75% { transform: translateX(-20%); clip-path: inset(0 20% 0 60%); }
-                    80%, 100% { transform: translateX(-40%); clip-path: inset(0 0% 0 80%); }
-                }
-                .growth-animation {
-                    animation: plantGrowth 15s infinite ease-in-out alternate;
-                    width: 500%;
-                    height: 100%;
-                    object-fit: contain;
-                }
-            </style>
-<img alt="Plant Growth Visualization" class="growth-animation" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ6C4jNODN11GfZ76qbpedDSbDSCjpxtKWtVm1PsImQw6D3J7nSkAcDJH2BZORaWOCKZ4Uh7OXfKMW1Sf2NDqNqnwICdX3OxX28dpayMObwnQIrLyajuxCq8n_uoGGgcZ5QGSfqwah8TpFxAwMb6iJ6zkyaj4c1NXM26DDEbFCuKqkck5yLk3vyo8El7BLFFxC49MWm6rv310fmMqf-YS1SZVnHpF_xR3XY1dMpPXKlEe9ZZV3MojyjoKqjP4xrXQcqkgAbsBiGy8"/>
-</div>
-<!-- Hardware Status Overlays -->
-<div class="absolute top-4 right-4 flex flex-col gap-3 z-10">
-<div class="flex items-center gap-3 p-3 bg-surface/80 backdrop-blur-sm neumorphic-convex-sm rounded-xl">
-<span class="material-symbols-outlined text-primary" data-icon="air">air</span>
-<div>
-<p class="font-label-sm font-bold">Main Fan</p>
-<p class="text-[10px] text-primary">850 RPM</p>
-</div>
-</div>
-<div class="flex items-center gap-3 p-3 bg-surface/80 backdrop-blur-sm neumorphic-convex-sm rounded-xl">
-<span class="material-symbols-outlined text-primary" data-icon="water_drop">water_drop</span>
-<div>
-<p class="font-label-sm font-bold">Mist Pump</p>
-<p class="text-[10px] text-primary">Pulsing</p>
-</div>
-</div>
-<div class="flex items-center gap-3 p-3 bg-surface/80 backdrop-blur-sm neumorphic-convex-sm rounded-xl opacity-50">
-<span class="material-symbols-outlined text-outline" data-icon="heat_pump">heat_pump</span>
-<div>
-<p class="font-label-sm font-bold">SSR Heater</p>
-<p class="text-[10px] text-on-surface-variant">Idle</p>
-</div>
-</div>
-</div>
-<!-- Legend Overlay -->
-<div class="absolute bottom-4 left-4 right-4 flex justify-between px-8 text-[10px] font-label-sm text-on-surface-variant uppercase tracking-widest opacity-40">
-<span>Germination</span>
-<span>Sprout</span>
-<span>Vegetative</span>
-<span>Budding</span>
-<span>Flowering</span>
-</div>
-</div>
-</div></section>
-<!-- Right Column: Efficiency & ROI -->
-<section class="col-span-12 lg:col-span-4 flex flex-col gap-gutter">
-<div class="neumorphic-convex bg-surface rounded-xl p-6 flex flex-col h-full">
-<h3 class="font-headline-md text-on-surface mb-6">Efficiency &amp; ROI</h3>
-<!-- Energy Chart -->
-<div class="mb-8">
-<div class="flex justify-between mb-2">
-<span class="font-label-md text-on-surface-variant">Energy Consumption</span>
-<span class="font-label-sm text-primary">-12% vs last cycle</span>
-</div>
-<div class="space-y-3">
-<div class="space-y-1">
-<p class="text-[10px] uppercase tracking-wider text-outline">Current</p>
-<div class="h-3 w-full neumorphic-inset rounded-full">
-<div class="h-full bg-secondary-container w-[80%] rounded-full"></div>
-</div>
-</div>
-<div class="space-y-1">
-<p class="text-[10px] uppercase tracking-wider text-outline">Optimized</p>
-<div class="h-3 w-full neumorphic-inset rounded-full">
-<div class="h-full bg-primary w-[65%] rounded-full"></div>
-</div>
-</div>
-</div>
-</div>
-<!-- Water Chart -->
-<div class="mb-8">
-<div class="flex justify-between mb-2">
-<span class="font-label-md text-on-surface-variant">Water Utilization</span>
-<span class="font-label-sm text-primary">-5.2L saved today</span>
-</div>
-<div class="space-y-3">
-<div class="space-y-1">
-<p class="text-[10px] uppercase tracking-wider text-outline">Current</p>
-<div class="h-3 w-full neumorphic-inset rounded-full">
-<div class="h-full bg-secondary-container w-[70%] rounded-full"></div>
-</div>
-</div>
-<div class="space-y-1">
-<p class="text-[10px] uppercase tracking-wider text-outline">Optimized</p>
-<div class="h-3 w-full neumorphic-inset rounded-full">
-<div class="h-full bg-secondary w-[60%] rounded-full"></div>
-</div>
-</div>
-</div>
-</div>
-<!-- ROI Card -->
-<div class="mt-auto p-6 neumorphic-inset rounded-xl bg-surface-container-lowest">
-<p class="font-label-md text-on-surface-variant mb-1">Projected Savings</p>
-<h4 class="font-display-lg text-tertiary">$1,240<span class="text-xl font-label-md"> / month</span></h4>
-<p class="font-label-sm text-on-surface-variant mt-2">Based on current yield optimization and automated climate control efficiency.</p>
-<button onclick="downloadROIReport()" class="mt-6 w-full py-3 bg-tertiary-container text-on-tertiary-container rounded-xl font-bold neumorphic-convex-sm hover:scale-[1.02] active:scale-95 transition-all">
-                                Download ROI Report
-                            </button>
-</div>
-</div>
-</section>
-</div>
-</div>
+        .neumorphic-convex { box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff; }
+        .neumorphic-convex-sm { box-shadow: 4px 4px 8px #d1d9e6, -4px -4px 8px #ffffff; }
+        .neumorphic-inset { box-shadow: inset 6px 6px 12px #d1d9e6, inset -6px -6px 12px #ffffff; }
+        .dark .neumorphic-convex { box-shadow: 8px 8px 16px rgba(0,0,0,0.5), -8px -8px 16px rgba(255,255,255,0.05); }
+        .dark .neumorphic-convex-sm { box-shadow: 4px 4px 8px rgba(0,0,0,0.5), -4px -4px 8px rgba(255,255,255,0.05); }
+        .dark .neumorphic-inset { box-shadow: inset 6px 6px 12px rgba(0,0,0,0.5), inset -6px -6px 12px rgba(255,255,255,0.05); }
+        body, div, button { transition: background-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease; }
+        .dark input, .dark select { background-color: #1e1f20; color: #f0f1f2; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-surface-bright dark:bg-inverse-surface text-on-surface dark:text-inverse-on-surface overflow-hidden h-screen flex">
+
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col p-6 space-y-4 h-screen w-64 bg-surface dark:bg-inverse-surface shadow-[8px_0_15px_rgba(0,0,0,0.03)] dark:shadow-[8px_0_15px_rgba(0,0,0,0.4)] z-50">
+    <div class="flex items-center gap-3 mb-8">
+        <div class="w-10 h-10 rounded-xl neumorphic-convex flex items-center justify-center bg-primary/10 text-primary">
+            <span class="material-symbols-outlined">biotech</span>
+        </div>
+        <div>
+            <h1 class="font-bold text-primary text-lg">System Core</h1>
+            <p class="text-[10px] text-on-surface-variant">v2.4 Organic Lab</p>
+        </div>
+    </div>
+    <nav class="flex-1 space-y-3">
+        <div class="flex items-center gap-3 p-3 bg-primary/10 text-primary rounded-xl shadow-inner cursor-pointer">
+            <span class="material-symbols-outlined">dashboard</span>
+            <span class="font-medium">Dashboard</span>
+        </div>
+        <a href="/analytics" class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-white/20 rounded-xl transition-all">
+            <span class="material-symbols-outlined">bar_chart</span>
+            <span class="font-medium">Analytics</span>
+        </a>
+        
+    </nav>
+    
+</aside>
+
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden">
+    <header class="flex justify-between items-center px-margin-desktop py-4 h-20 bg-surface dark:bg-inverse-surface shadow-md z-40">
+        <h2 class="text-2xl font-bold text-primary">BioGrow Lab</h2>
+        <div class="flex items-center gap-6">
+            <span onclick="toggleTheme()" class="material-symbols-outlined cursor-pointer" id="theme-icon">dark_mode</span>
+            <div class="w-10 h-10 rounded-full neumorphic-convex overflow-hidden border-2 border-white cursor-pointer" onclick="document.getElementById('profile-upload').click()">
+                <input type="file" id="profile-upload" class="hidden" accept="image/*" onchange="uploadProfile(event)"/>
+                <img id="profile-img" class="w-full h-full object-cover" src="https://via.placeholder.com/40"/>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex-1 overflow-y-auto p-margin-desktop">
+        <div class="max-w-container-max mx-auto grid grid-cols-12 gap-gutter">
+            <!-- 3 Ana Kart: Sıcaklık, Nem, CO2 -->
+            <div class="col-span-12 md:col-span-3 neumorphic-convex p-6 bg-surface rounded-xl">
+                <h3 class="text-sm font-semibold text-on-surface-variant">Sıcaklık</h3>
+                <div class="flex justify-center items-center mt-4">
+                    <div class="relative w-32 h-32 neumorphic-inset rounded-full flex items-center justify-center">
+                        <span class="text-4xl font-bold text-primary" id="temp-value">--</span>
+                        <span class="text-xl">°C</span>
+                    </div>
+                </div>
+                <p class="text-center mt-3 text-sm" id="temp-status">--</p>
+            </div>
+            <div class="col-span-12 md:col-span-3 neumorphic-convex p-6 bg-surface rounded-xl">
+                <h3 class="text-sm font-semibold text-on-surface-variant">Nem</h3>
+                <div class="flex justify-center items-center mt-4">
+                    <div class="relative w-32 h-32 neumorphic-inset rounded-full flex items-center justify-center">
+                        <span class="text-4xl font-bold text-secondary" id="humidity-value">--</span>
+                        <span class="text-xl">%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-12 md:col-span-3 neumorphic-convex p-6 bg-surface rounded-xl">
+                <h3 class="text-sm font-semibold text-on-surface-variant">CO₂</h3>
+                <div class="flex justify-center items-center mt-4">
+                    <div class="relative w-32 h-32 neumorphic-inset rounded-full flex items-center justify-center">
+                        <span class="text-4xl font-bold text-tertiary" id="co2-value">--</span>
+                        <span class="text-xl">ppm</span>
+                    </div>
+                </div>
+                <p class="text-center mt-3 text-xs text-error" id="co2-status"></p>
+            </div>
+            <div class="col-span-12 md:col-span-3 neumorphic-convex p-6 bg-surface rounded-xl">
+                <h3 class="text-sm font-semibold text-on-surface-variant">Toprak Nemi</h3>
+                <div class="flex justify-center items-center mt-4">
+                    <div class="relative w-32 h-32 neumorphic-inset rounded-full flex items-center justify-center">
+                        <span class="text-4xl font-bold text-blue-600 dark:text-blue-400" id="soil-moisture-value">--</span>
+                        <span class="text-xl">%</span>
+                    </div>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mt-3">
+                    <div id="soil-bar" class="bg-blue-600 h-2 rounded-full" style="width:0%"></div>
+                </div>
+            </div>
+
+            <!-- Aktüatör Durumları (Fan & Pompa) -->
+            <div class="col-span-12 md:col-span-6 neumorphic-convex p-6 bg-surface rounded-xl">
+                <h3 class="text-lg font-semibold mb-4">Aktüatör Durumları</h3>
+                <div class="flex justify-around">
+                    <div class="text-center">
+                        <span class="material-symbols-outlined text-4xl text-primary">air</span>
+                        <p class="font-bold">Fan</p>
+                        <span id="fan-status" class="inline-block px-3 py-1 rounded-full text-sm bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-200">Bekleniyor</span>
+                    </div>
+                    <div class="text-center">
+                        <span class="material-symbols-outlined text-4xl text-secondary">water_drop</span>
+                        <p class="font-bold">Pompa</p>
+                        <span id="pump-status" class="inline-block px-3 py-1 rounded-full text-sm bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-200">Bekleniyor</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Son Ölçüm Zamanı -->
+            <div class="col-span-12 md:col-span-6 neumorphic-convex p-6 bg-surface rounded-xl flex items-center justify-between">
+                <span class="material-symbols-outlined text-3xl">schedule</span>
+                <div>
+                    <p class="text-sm text-on-surface-variant">Son Ölçüm</p>
+                    <p id="last-update" class="font-mono text-sm">--</p>
+                </div>
+                <button onclick="refreshDashboard()" class="neumorphic-convex-sm p-2 rounded-full">
+                    <span class="material-symbols-outlined">refresh</span>
+                </button>
+            </div>
+        </div>
+    </div>
 </main>
-<!-- Toast notification -->
-<div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[999] px-6 py-3 bg-inverse-surface text-inverse-on-surface rounded-xl font-label-md text-sm shadow-xl opacity-0 pointer-events-none transition-all duration-300 translate-y-2">
-  Toast message
-</div>
 
-<!-- Notifications Dropdown -->
-<div id="notif-panel" class="hidden fixed top-20 right-8 z-[999] w-80 bg-surface neumorphic-convex rounded-xl p-4 space-y-3">
-  <h4 class="font-label-md font-bold text-on-surface border-b border-surface-variant pb-2">Notifications</h4>
-  <div class="flex items-start gap-3 p-2 hover:bg-surface-container-high rounded-lg cursor-pointer">
-    <span class="material-symbols-outlined text-primary text-xl mt-0.5">thermostat</span>
-    <div><p class="font-label-md text-on-surface text-sm">Temperature spike detected</p><p class="text-[11px] text-on-surface-variant">Chamber 04-B — 5 min ago</p></div>
-  </div>
-  <div class="flex items-start gap-3 p-2 hover:bg-surface-container-high rounded-lg cursor-pointer">
-    <span class="material-symbols-outlined text-secondary text-xl mt-0.5">water_drop</span>
-    <div><p class="font-label-md text-on-surface text-sm">Mist cycle completed</p><p class="text-[11px] text-on-surface-variant">All chambers — 12 min ago</p></div>
-  </div>
-  <div class="flex items-start gap-3 p-2 hover:bg-surface-container-high rounded-lg cursor-pointer">
-    <span class="material-symbols-outlined text-tertiary text-xl mt-0.5">eco</span>
-    <div><p class="font-label-md text-on-surface text-sm">Batch 4402 entered budding stage</p><p class="text-[11px] text-on-surface-variant">1 hour ago</p></div>
-  </div>
-</div>
-
-<!-- New Batch Modal -->
-<div id="new-batch-modal" class="hidden fixed inset-0 z-[998] bg-black/30 backdrop-blur-sm flex items-center justify-center">
-  <div class="bg-surface neumorphic-convex rounded-2xl p-8 w-full max-w-md mx-4 space-y-6">
-    <div class="flex justify-between items-center">
-      <h3 class="font-headline-md text-on-surface">New Cultivation Batch</h3>
-      <button onclick="closeNewBatchModal()" class="material-symbols-outlined text-on-surface-variant hover:text-on-surface transition-colors">close</button>
-    </div>
-    <div class="space-y-4">
-      <div>
-        <label class="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-1">Batch ID</label>
-        <div class="neumorphic-inset rounded-xl px-4 py-3">
-          <input type="text" placeholder="e.g. Batch-4403" class="bg-transparent border-none outline-none w-full font-label-md text-on-surface" id="batch-id" />
+<!-- Toast & Modals (kısaltılmış) -->
+<div id="toast" class="fixed bottom-8 left-1/2 transform -translate-x-1/2 px-6 py-3 bg-black text-white rounded-xl text-sm opacity-0 pointer-events-none transition-all duration-300 z-[999]">Mesaj</div>
+<div id="new-batch-modal" class="hidden fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-[998]">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 w-96">
+        <h3 class="text-xl font-bold mb-4">Yeni Batch</h3>
+        <input type="text" id="batch-id" placeholder="Batch ID" class="w-full p-2 border rounded mb-2">
+        <select id="batch-type" class="w-full p-2 border rounded mb-4"><option>Oyster</option><option>Shiitake</option></select>
+        <div class="flex justify-end gap-2">
+            <button onclick="closeNewBatchModal()" class="px-4 py-2 bg-gray-300 rounded">İptal</button>
+            <button onclick="createBatch()" class="px-4 py-2 bg-primary text-white rounded">Oluştur</button>
         </div>
-      </div>
-      <div>
-        <label class="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-1">Cultivar Type</label>
-        <div class="neumorphic-inset rounded-xl px-4 py-3">
-          <select class="bg-transparent border-none outline-none w-full font-label-md text-on-surface" id="batch-type">
-            <option>Oyster Mushroom</option>
-            <option>Shiitake</option>
-            <option>Lion's Mane</option>
-            <option>Reishi</option>
-            <option>King Trumpet</option>
-          </select>
-        </div>
-      </div>
-      <div>
-        <label class="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-1">Chamber</label>
-        <div class="neumorphic-inset rounded-xl px-4 py-3">
-          <select class="bg-transparent border-none outline-none w-full font-label-md text-on-surface">
-            <option>Chamber 04-B</option>
-            <option>Chamber 05-A</option>
-            <option>Chamber 06-C</option>
-          </select>
-        </div>
-      </div>
     </div>
-    <div class="flex gap-3 pt-2">
-      <button onclick="closeNewBatchModal()" class="flex-1 py-3 bg-surface neumorphic-convex rounded-xl font-label-md text-on-surface-variant hover:text-on-surface active:scale-95 transition-all">Cancel</button>
-      <button onclick="createBatch()" class="flex-1 py-3 bg-primary text-on-primary rounded-xl font-label-md neumorphic-convex-sm active:scale-95 transition-all">Create Batch</button>
-    </div>
-  </div>
-</div>
-
-<!-- Logout Confirm Modal -->
-<div id="logout-modal" class="hidden fixed inset-0 z-[998] bg-black/30 backdrop-blur-sm flex items-center justify-center">
-  <div class="bg-surface neumorphic-convex rounded-2xl p-8 w-full max-w-sm mx-4 space-y-6 text-center">
-    <span class="material-symbols-outlined text-error text-5xl">logout</span>
-    <div>
-      <h3 class="font-headline-md text-on-surface">Log out?</h3>
-      <p class="font-label-md text-on-surface-variant mt-1">You will be redirected to the login screen.</p>
-    </div>
-    <div class="flex gap-3">
-      <button onclick="document.getElementById('logout-modal').classList.add('hidden')" class="flex-1 py-3 bg-surface neumorphic-convex rounded-xl font-label-md text-on-surface-variant active:scale-95 transition-all">Cancel</button>
-      <button onclick="showToast('Logged out'); document.getElementById('logout-modal').classList.add('hidden')" class="flex-1 py-3 bg-error text-on-error rounded-xl font-label-md neumorphic-convex-sm active:scale-95 transition-all">Log Out</button>
-    </div>
-  </div>
 </div>
 
 <script>
-  // Toast
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.remove('opacity-0','translate-y-2');
-    t.classList.add('opacity-100','translate-y-0');
-    setTimeout(() => {
-      t.classList.add('opacity-0','translate-y-2');
-      t.classList.remove('opacity-100','translate-y-0');
-    }, 2800);
-  }
+    const API_BASE = '';
+    let ws = null;
 
-  // Notifications
-  function toggleNotifications() {
-    const p = document.getElementById('notif-panel');
-    p.classList.toggle('hidden');
-    document.addEventListener('click', function hideNotif(e) {
-      if (!p.contains(e.target) && !e.target.closest('[data-icon="notifications"]')) {
-        p.classList.add('hidden');
-        document.removeEventListener('click', hideNotif);
-      }
-    });
-  }
+    function updateUI(data) {
+        if (data.sicaklik !== undefined) {
+            document.getElementById('temp-value').innerText = data.sicaklik.toFixed(1);
+            let status = document.getElementById('temp-status');
+            if (data.sicaklik < 22) status.innerText = '❄️ Düşük';
+            else if (data.sicaklik > 26) status.innerText = '🔥 Yüksek';
+            else status.innerText = '✅ Optimum';
+        }
+        if (data.nem !== undefined) document.getElementById('humidity-value').innerText = Math.round(data.nem);
+        if (data.co2 !== undefined) {
+            document.getElementById('co2-value').innerText = data.co2;
+            let co2Status = document.getElementById('co2-status');
+            if (data.co2 > 1000) co2Status.innerText = '⚠️ Kritik';
+            else if (data.co2 > 800) co2Status.innerText = '⚠️ Yüksek';
+            else co2Status.innerText = '✅ Normal';
+        }
+        if (data.toprak_nemi !== undefined) {
+            let soil = data.toprak_nemi;
+            document.getElementById('soil-moisture-value').innerText = Math.round(soil);
+            document.getElementById('soil-bar').style.width = `${Math.min(100, soil)}%`;
+        }
+        if (data.fan_aktif !== undefined) {
+            let fanSpan = document.getElementById('fan-status');
+            if (data.fan_aktif === 1) {
+                fanSpan.innerText = '✅ Aktif';
+                fanSpan.className = "inline-block px-3 py-1 rounded-full text-sm bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200";
+            } else {
+                fanSpan.innerText = '⭕ Pasif';
+                fanSpan.className = "inline-block px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300";
+            }
+        }
+        if (data.pompa_aktif !== undefined) {
+            let pumpSpan = document.getElementById('pump-status');
+            if (data.pompa_aktif === 1) {
+                pumpSpan.innerText = '💧 Aktif';
+                pumpSpan.className = "inline-block px-3 py-1 rounded-full text-sm bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200";
+            } else {
+                pumpSpan.innerText = '⭕ Pasif';
+                pumpSpan.className = "inline-block px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300";
+            }
+        }
+        if (data.zaman) {
+            let d = new Date(data.zaman);
+            document.getElementById('last-update').innerText = d.toLocaleString();
+        }
+    }
 
-  // New Batch Modal
-  function openNewBatchModal() {
-    document.getElementById('new-batch-modal').classList.remove('hidden');
-  }
-  function closeNewBatchModal() {
-    document.getElementById('new-batch-modal').classList.add('hidden');
-  }
-  function createBatch() {
-    const id = document.getElementById('batch-id').value.trim() || 'Batch-4403';
-    const type = document.getElementById('batch-type').value;
-    closeNewBatchModal();
-    showToast(`✓ ${id} (${type}) created successfully`);
-  }
-  document.getElementById('new-batch-modal').addEventListener('click', function(e) {
-    if (e.target === this) closeNewBatchModal();
-  });
+    async function fetchLast() {
+        try {
+            const res = await fetch(`${API_BASE}/api/son-olcum`);
+            if (res.ok) {
+                const data = await res.json();
+                if (data) updateUI(data);
+            }
+        } catch(e) { console.warn(e); }
+    }
 
-  // Logout
-  function confirmLogout() {
-    document.getElementById('logout-modal').classList.remove('hidden');
-  }
+    function setupWebSocket() {
+        const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+        ws = new WebSocket(`${protocol}//${location.host}/ws`);
+        ws.onmessage = (e) => {
+            try {
+                const data = JSON.parse(e.data);
+                updateUI(data);
+            } catch(err) {}
+        };
+        ws.onclose = () => setTimeout(setupWebSocket, 3000);
+    }
 
-  // Download ROI Report
-  function downloadROIReport() {
-    const content = `BioGrow Lab - ROI Report\nGenerated: ${new Date().toLocaleString()}\n\nProjected Savings: $1,240 / month\nEnergy Consumption: -12% vs last cycle\nWater Saved: -5.2L today\nYield Optimization: Active\nClimate Control Efficiency: 88%\n\nBased on current yield optimization and automated climate control efficiency.`;
-    const blob = new Blob([content], { type: 'text/plain' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'BioGrow_ROI_Report.txt';
-    a.click();
-    showToast('ROI Report downloaded');
-  }
+    function refreshDashboard() { fetchLast(); showToast('Veriler yenilendi'); }
+    function showToast(msg) { let t = document.getElementById('toast'); t.innerText = msg; t.classList.remove('opacity-0'); t.classList.add('opacity-100'); setTimeout(() => { t.classList.add('opacity-0'); t.classList.remove('opacity-100'); }, 2000); }
+    function toggleTheme() { document.documentElement.classList.toggle('dark'); }
+    function uploadProfile(e) { if(e.target.files[0]) { let reader = new FileReader(); reader.onload = ev => document.getElementById('profile-img').src = ev.target.result; reader.readAsDataURL(e.target.files[0]); } }
+    function openNewBatchModal() { document.getElementById('new-batch-modal').classList.remove('hidden'); }
+    function closeNewBatchModal() { document.getElementById('new-batch-modal').classList.add('hidden'); }
+    function createBatch() { closeNewBatchModal(); showToast('Batch oluşturuldu'); }
+
+    fetchLast();
+    setupWebSocket();
 </script>
-</body></html>
+</body>
+</html>
